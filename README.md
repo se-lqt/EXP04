@@ -5,10 +5,32 @@
 实验包含两个应用：
 
 1. 第一个应用：获取URL地址并启动隐式Intent的调用。
-
 2. 第二个应用：自定义WebView来加载URL。
 
-   
+
+
+**相关知识点：**
+
+（1）隐式 Intent 它并不明确指出我们想要启动哪一个活动， 而是指定了一系列更为抽象的 action 和 category 等信息， 然后交由系统去分析这个 Intent，并帮我们找出合适的活动去启动。
+
+（2）`<intent-filter>……</intent-filter>`里定义的所有内容都是用来定义该activity可以被哪些intent激活的，如果匹配，就会被激活。
+
+（3）在`<intent-filter>`里有以下几个属性可以让intent来匹配：Action、Category、Data；
+
+- Action：该activity可以执行的动作
+  如果跟这里`<intent-filter>`所列出的任意一个匹配的话，就说明这个activity是可以完成这个intent的意图的，可以将它激活。可以用setAction函数为intent对象指定一个动作，也可以用getAction读取Intent对象中的动作信息。
+  注意：一条`<intent-filter>`元素至少应该包含一个`<action>`，否则任何Intent请求都不能和该`<intent-filter>`匹配。一个Intent只能指定一个action，但是一个Activity可以设置（监听、匹配）多个action（即intent-filter中可以设置多个action属性），这是两个不同的概念。
+- Category：用于指定当前动作（Action）执行的环境
+  即这个activity在哪个环境中才能被激活。不属于这个环境的，不能被激活。
+  如果该activity想要通过隐式intent方式激活，那么不能没有任何category设置，
+  至少包含一个android.intent.category.DEFAULT
+  一个Intent只能有一个Action，但是可以有多个Category.同一个Intent中的多个Category项彼此间是“与”的关系。也就是说一个组件需要支持全部的category项才能处理该请求。
+- Data：执行时要操作的数据，即执行动作的URI，不同的动作有不同的数据规格。
+  如果定义了Data，但intent却没有传进来指定类型的Data时，也不能激活该activity。
+
+
+
+**实验过程**
 
 （一）创建一个WebViewActivity，设置Intent-filter属性
 
@@ -182,7 +204,7 @@ tools:context=".WebViewActivity">
 
 选择自定义浏览器，但是出现WebView无法显示网页net:ERR_CLEARTEXT_NOT_PERMITTED
 
-![46__@32S_F4YN_251I9_Q3K.png](https://i.loli.net/2020/11/02/RCep3qsQEiArjbl.png)
+![46__@32S_F4YN_251I9_Q3K.png](https://i.loli.net/2020/11/30/Nb7EZhIjaJX3cuY.png)
 
 解决方法：在AndroidManifest.xml中添加一个属性
 
